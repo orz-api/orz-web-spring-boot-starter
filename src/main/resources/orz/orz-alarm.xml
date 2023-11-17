@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<included>
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+    <springProperty scope="context" name="orz_alarm_log_file_path" source="logging.file.path"/>
+    <appender name="orz-alarm-file-appender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+            <charset>${FILE_LOG_CHARSET}</charset>
+        </encoder>
+        <file>${orz_alarm_log_file_path}/orz_alarm.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${orz_alarm_log_file_path}/orz_alarm.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <cleanHistoryOnStart>false</cleanHistoryOnStart>
+            <maxFileSize>1024MB</maxFileSize>
+            <totalSizeCap>0</totalSizeCap>
+            <maxHistory>14</maxHistory>
+        </rollingPolicy>
+    </appender>
+    <logger name="orz-alarm" level="INFO" additivity="false">
+        <appender-ref ref="orz-alarm-file-appender"/>
+    </logger>
+</included>
