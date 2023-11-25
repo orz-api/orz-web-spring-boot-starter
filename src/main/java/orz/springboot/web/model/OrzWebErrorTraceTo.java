@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrzWebErrorTraceT1 {
+public class OrzWebErrorTraceTo {
     private String service;
     private String endpoint;
     private String details;

@@ -5,19 +5,15 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.slf4j.event.Level;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.method.HandlerMethod;
-import orz.springboot.web.model.OrzWebProtocolB1;
 import orz.springboot.web.model.OrzWebErrorRsp;
-import orz.springboot.web.model.OrzWebErrorTraceT1;
+import orz.springboot.web.model.OrzWebErrorTraceTo;
+import orz.springboot.web.model.OrzWebProtocolBo;
 
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -27,7 +23,6 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 @Component
 public class OrzWebApiHandler {
-    private static final Logger alarmLog = LoggerFactory.getLogger("orz-alarm");
     private final OrzWebProps props;
 
     public OrzWebApiHandler(OrzWebProps props) {
@@ -56,13 +51,13 @@ public class OrzWebApiHandler {
      * @param request      请求
      * @return 错误响应
      */
-    public ResponseEntity<?> buildErrorResponse(OrzWebProtocolB1 protocol, String reason, @Nullable List<OrzWebErrorTraceT1> extraTraces, Exception topException, HttpServletRequest request) {
+    public ResponseEntity<?> buildErrorResponse(OrzWebProtocolBo protocol, String reason, @Nullable List<OrzWebErrorTraceTo> extraTraces, Exception topException, HttpServletRequest request) {
         String exposeReason = null;
         if (props.isExposeErrorReason()) {
             exposeReason = reason;
         }
 
-        List<OrzWebErrorTraceT1> exposeTraces = null;
+        List<OrzWebErrorTraceTo> exposeTraces = null;
         if (props.isExposeErrorTraces()) {
             exposeTraces = getTraces(request, topException, extraTraces);
         }
@@ -82,42 +77,6 @@ public class OrzWebApiHandler {
         }
     }
 
-    /**
-     * 报告错误
-     * <p>
-     * 将进行记录日志、上报运维追踪平台、发送告警等操作
-     *
-     * @param alarm        是否告警
-     * @param logging      是否输出日志
-     * @param reason       错误原因
-     * @param topException 最顶层的异常
-     * @param method       出错的方法
-     * @param logger       日志记录器
-     * @param logLevel     日志级别
-     */
-    public void reportError(boolean alarm, boolean logging, String reason, Exception topException, HandlerMethod method, Logger logger, Level logLevel) {
-        if (alarm) {
-            // TODO: report to other monitor platform
-            alarmLog.error("orz-api [{}.{}] threw [{}] exception",
-                    method.getMethod().getDeclaringClass().getSimpleName(),
-                    method.getMethod().getName(),
-                    reason,
-                    topException
-            );
-        }
-
-        if (logging) {
-            if (logger.isEnabledForLevel(logLevel)) {
-                logger.atLevel(logLevel).log("orz-api [{}.{}] threw [{}] exception",
-                        method.getMethod().getDeclaringClass().getSimpleName(),
-                        method.getMethod().getName(),
-                        reason,
-                        topException
-                );
-            }
-        }
-    }
-
     public String getEndpoint(HttpServletRequest request) {
         var contextPath = request.getContextPath();
         var endpoint = request.getRequestURI();
@@ -127,9 +86,9 @@ public class OrzWebApiHandler {
         return endpoint;
     }
 
-    public List<OrzWebErrorTraceT1> getTraces(HttpServletRequest request, Exception topException, @Nullable List<OrzWebErrorTraceT1> extraTraces) {
-        var traces = new ArrayList<OrzWebErrorTraceT1>();
-        traces.add(new OrzWebErrorTraceT1(props.getService(), getEndpoint(request), ExceptionUtils.getStackTrace(topException)));
+    public List<OrzWebErrorTraceTo> getTraces(HttpServletRequest request, Exception topException, @Nullable List<OrzWebErrorTraceTo> extraTraces) {
+        var traces = new ArrayList<OrzWebErrorTraceTo>();
+        traces.add(new OrzWebErrorTraceTo(props.getService(), getEndpoint(request), ExceptionUtils.getStackTrace(topException)));
         if (!CollectionUtils.isEmpty(extraTraces)) {
             traces.addAll(extraTraces);
         }

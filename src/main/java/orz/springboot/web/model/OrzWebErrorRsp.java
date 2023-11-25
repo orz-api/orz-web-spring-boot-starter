@@ -12,5 +12,5 @@ import java.util.List;
 public class OrzWebErrorRsp {
     private String code;
     private String reason;
-    private List<OrzWebErrorTraceT1> traces;
+    private List<OrzWebErrorTraceTo> traces;
 }

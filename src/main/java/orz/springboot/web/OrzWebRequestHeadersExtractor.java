@@ -7,15 +7,15 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.server.ResponseStatusException;
-import orz.springboot.web.model.OrzWebRequestHeadersB1;
+import orz.springboot.web.model.OrzWebRequestHeadersBo;
 
 import java.util.Optional;
 
-import static orz.springboot.base.OrzBaseUtils.message;
+import static orz.springboot.base.description.OrzDescriptionUtils.desc;
 
 @Component
 public class OrzWebRequestHeadersExtractor {
-    private static final String REQUEST_HEADERS_ATTRIBUTE_NAME = OrzWebRequestHeadersB1.class.getName();
+    private static final String REQUEST_HEADERS_ATTRIBUTE_NAME = OrzWebRequestHeadersBo.class.getName();
 
     private final OrzWebProps props;
 
@@ -23,7 +23,7 @@ public class OrzWebRequestHeadersExtractor {
         this.props = props;
     }
 
-    public OrzWebRequestHeadersB1 extract() {
+    public OrzWebRequestHeadersBo extract() {
         var request = getCurrentRequest();
         if (request == null) {
             throw new ResponseStatusException(500, "current request is null", null);
@@ -31,13 +31,13 @@ public class OrzWebRequestHeadersExtractor {
         return extract(request);
     }
 
-    public OrzWebRequestHeadersB1 extract(HttpServletRequest request) {
+    public OrzWebRequestHeadersBo extract(HttpServletRequest request) {
         return extractFromRequestContext().orElseGet(() -> extractFromRequest(request));
     }
 
-    private OrzWebRequestHeadersB1 extractFromRequest(HttpServletRequest request) {
+    private OrzWebRequestHeadersBo extractFromRequest(HttpServletRequest request) {
         var field = props.getRequestHeaders();
-        var headers = new OrzWebRequestHeadersB1(
+        var headers = new OrzWebRequestHeadersBo(
                 getStringHeader(request, field.getRequestId(), field.isRequestIdRequired()),
                 getLongHeader(request, field.getRequestTime(), field.isRequestTimeRequired()),
                 getLongHeader(request, field.getUserId(), field.isUserIdRequired()),
@@ -58,13 +58,13 @@ public class OrzWebRequestHeadersExtractor {
         return saveToRequestContext(headers);
     }
 
-    private Optional<OrzWebRequestHeadersB1> extractFromRequestContext() {
+    private Optional<OrzWebRequestHeadersBo> extractFromRequestContext() {
         return Optional.ofNullable(RequestContextHolder.getRequestAttributes())
                 .map(attrs -> attrs.getAttribute(REQUEST_HEADERS_ATTRIBUTE_NAME, RequestAttributes.SCOPE_REQUEST))
-                .map(OrzWebRequestHeadersB1.class::cast);
+                .map(OrzWebRequestHeadersBo.class::cast);
     }
 
-    private OrzWebRequestHeadersB1 saveToRequestContext(OrzWebRequestHeadersB1 headers) {
+    private OrzWebRequestHeadersBo saveToRequestContext(OrzWebRequestHeadersBo headers) {
         var requestAttributes = RequestContextHolder.getRequestAttributes();
         if (requestAttributes != null) {
             requestAttributes.setAttribute(REQUEST_HEADERS_ATTRIBUTE_NAME, headers, RequestAttributes.SCOPE_REQUEST);
@@ -84,7 +84,7 @@ public class OrzWebRequestHeadersExtractor {
         var headerValue = request.getHeader(headerName);
         if (StringUtils.isBlank(headerValue)) {
             if (required) {
-                throw new ResponseStatusException(400, message("header not found", "header", headerName), null);
+                throw new ResponseStatusException(400, desc("header not found", "header", headerName), null);
             } else {
                 return null;
             }
@@ -100,7 +100,7 @@ public class OrzWebRequestHeadersExtractor {
         try {
             return Long.valueOf(str);
         } catch (Exception e) {
-            throw new ResponseStatusException(400, message("header is invalid", "header", headerName, "value", str), null);
+            throw new ResponseStatusException(400, desc("header is invalid", "header", headerName, "value", str), null);
         }
     }
 
@@ -112,7 +112,7 @@ public class OrzWebRequestHeadersExtractor {
         try {
             return Integer.valueOf(str);
         } catch (Exception e) {
-            throw new ResponseStatusException(400, message("header is invalid", "header", headerName, "value", str), null);
+            throw new ResponseStatusException(400, desc("header is invalid", "header", headerName, "value", str), null);
         }
     }
 
@@ -132,7 +132,7 @@ public class OrzWebRequestHeadersExtractor {
         }
         if (ip == null) {
             if (required) {
-                throw new ResponseStatusException(400, message("header not found", "header", headerName), null);
+                throw new ResponseStatusException(400, desc("header not found", "header", headerName), null);
             } else {
                 return null;
             }

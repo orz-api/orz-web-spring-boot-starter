@@ -6,7 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import orz.springboot.web.OrzWebApiDefinition;
 
 @Data
-public class OrzWebProtocolB1 {
+public class OrzWebProtocolBo {
     private final int version;
     private final String code;
     private final String notice;
@@ -19,28 +19,28 @@ public class OrzWebProtocolB1 {
         return StringUtils.equals(this.code, code);
     }
 
-    public static OrzWebProtocolB1 success() {
+    public static OrzWebProtocolBo success() {
         return success(null);
     }
 
-    public static OrzWebProtocolB1 success(Integer version) {
-        return new OrzWebProtocolB1(
+    public static OrzWebProtocolBo success(Integer version) {
+        return new OrzWebProtocolBo(
                 ObjectUtils.defaultIfNull(version, OrzWebApiDefinition.VERSION_CURRENT),
                 null,
                 null
         );
     }
 
-    public static OrzWebProtocolB1 error() {
+    public static OrzWebProtocolBo error() {
         return error(null, null, null);
     }
 
-    public static OrzWebProtocolB1 error(String code, String notice) {
+    public static OrzWebProtocolBo error(String code, String notice) {
         return error(null, code, notice);
     }
 
-    public static OrzWebProtocolB1 error(Integer version, String code, String notice) {
-        return new OrzWebProtocolB1(
+    public static OrzWebProtocolBo error(Integer version, String code, String notice) {
+        return new OrzWebProtocolBo(
                 ObjectUtils.defaultIfNull(version, OrzWebApiDefinition.VERSION_CURRENT),
                 StringUtils.defaultIfBlank(code, OrzWebApiDefinition.CODE_UNDEFINED),
                 StringUtils.defaultIfBlank(notice, null)

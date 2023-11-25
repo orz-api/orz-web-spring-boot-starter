@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class OrzWebRequestHeadersB1 {
+public class OrzWebRequestHeadersBo {
     private final String requestId;
 
     private final Long requestTime;
