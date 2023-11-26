@@ -37,7 +37,7 @@ public class OrzWebApiHandler {
      * @return 响应体
      */
     public Object processSuccessResponse(@Nullable Object body, @Nonnull ServerHttpResponse response) {
-        response.getHeaders().set(props.getResponseHeaders().getVersion(), String.valueOf(OrzWebApiConstants.VERSION_CURRENT));
+        response.getHeaders().set(props.getResponseHeaders().getVersion(), String.valueOf(OrzWebConstants.VERSION_CURRENT));
         return body;
     }
 

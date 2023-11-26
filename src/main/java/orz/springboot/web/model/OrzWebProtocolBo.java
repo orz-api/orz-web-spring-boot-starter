@@ -3,7 +3,7 @@ package orz.springboot.web.model;
 import lombok.Data;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
-import orz.springboot.web.OrzWebApiConstants;
+import orz.springboot.web.OrzWebConstants;
 
 @Data
 public class OrzWebProtocolBo {
@@ -25,7 +25,7 @@ public class OrzWebProtocolBo {
 
     public static OrzWebProtocolBo success(Integer version) {
         return new OrzWebProtocolBo(
-                ObjectUtils.defaultIfNull(version, OrzWebApiConstants.VERSION_CURRENT),
+                ObjectUtils.defaultIfNull(version, OrzWebConstants.VERSION_CURRENT),
                 null,
                 null
         );
@@ -41,8 +41,8 @@ public class OrzWebProtocolBo {
 
     public static OrzWebProtocolBo error(Integer version, String code, String notice) {
         return new OrzWebProtocolBo(
-                ObjectUtils.defaultIfNull(version, OrzWebApiConstants.VERSION_CURRENT),
-                StringUtils.defaultIfBlank(code, OrzWebApiConstants.CODE_UNDEFINED),
+                ObjectUtils.defaultIfNull(version, OrzWebConstants.VERSION_CURRENT),
+                StringUtils.defaultIfBlank(code, OrzWebConstants.CODE_UNDEFINED),
                 StringUtils.defaultIfBlank(notice, null)
         );
     }
