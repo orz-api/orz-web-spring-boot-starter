@@ -5,4 +5,6 @@ public class OrzWebConstants {
     public static final int VERSION_CURRENT = VERSION_MIN;
 
     public static final String CODE_UNDEFINED = "undefined";
+
+    public static final String API_PACKAGE = "api";
 }

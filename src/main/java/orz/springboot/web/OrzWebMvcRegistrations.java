@@ -18,6 +18,7 @@ import java.lang.reflect.Modifier;
 import java.util.Arrays;
 
 import static orz.springboot.base.description.OrzDescriptionUtils.desc;
+import static orz.springboot.web.OrzWebConstants.API_PACKAGE;
 
 @Slf4j
 @Component
@@ -43,7 +44,7 @@ public class OrzWebMvcRegistrations implements WebMvcRegistrations {
                 }
 
                 var scope = packageArray[packageArray.length - 1];
-                if ("api".equals(scope)) {
+                if (API_PACKAGE.equals(scope)) {
                     scope = null;
                 }
 
@@ -65,11 +66,14 @@ public class OrzWebMvcRegistrations implements WebMvcRegistrations {
             if (StringUtils.isNotBlank(scope)) {
                 builder.append(StringUtils.capitalize(scope)).append("/");
             }
-            builder.append(StringUtils.capitalize(annotation.domain()));
+            builder.append(annotation.domain());
             if (StringUtils.isNotBlank(annotation.resource())) {
-                builder.append(StringUtils.capitalize(annotation.resource()));
+                builder.append(annotation.resource());
             }
-            builder.append(StringUtils.capitalize(annotation.action()));
+            builder.append(annotation.action());
+            if (StringUtils.isNotBlank(annotation.by())) {
+                builder.append("By").append(annotation.by());
+            }
             if (annotation.variant() != 0) {
                 builder.append("V").append(annotation.variant());
             }
@@ -86,12 +90,14 @@ public class OrzWebMvcRegistrations implements WebMvcRegistrations {
             if (StringUtils.isBlank(annotation.action())) {
                 throw new FatalBeanException(desc("@OrzWebApi action is blank", "beanClass", beanClass));
             }
-            var expectNamePrefix = StringUtils.capitalize(annotation.domain())
-                    + StringUtils.capitalize(StringUtils.defaultIfBlank(annotation.resource(), ""))
-                    + StringUtils.capitalize(annotation.action())
-                    + (annotation.variant() == 0 ? "" : "V" + annotation.variant());
-            if (!(expectNamePrefix + "Api").equals(beanClass.getSimpleName())) {
-                throw new FatalBeanException(desc("@OrzWebApi class name is invalid", "beanClass", beanClass.getSimpleName(), "expectClassName", expectNamePrefix + "Api"));
+            var expectClassName = annotation.domain()
+                    + StringUtils.defaultIfBlank(annotation.resource(), "")
+                    + annotation.action()
+                    + (StringUtils.isNotBlank(annotation.by()) ? "By" + annotation.by() : "")
+                    + (annotation.variant() == 0 ? "" : "V" + annotation.variant())
+                    + "Api";
+            if (!expectClassName.equals(beanClass.getSimpleName())) {
+                throw new FatalBeanException(desc("@OrzWebApi class name is invalid", "beanClass", beanClass.getSimpleName(), "expectClassName", expectClassName));
             }
             if (packageArray.length < 2) {
                 throw new FatalBeanException(desc("@OrzWebApi package name is invalid", "beanClass", beanClass));
@@ -113,15 +119,15 @@ public class OrzWebMvcRegistrations implements WebMvcRegistrations {
             if (parameterClass.isAnnotation() || parameterClass.isArray() || parameterClass.isEnum() || parameterClass.isInterface() || parameterClass.isPrimitive()) {
                 throw new FatalBeanException(desc("@OrzWebApi request method parameter class is invalid", "beanClass", beanClass, "parameterClass", parameterClass));
             }
-            if (!(expectNamePrefix + "Req").equals(parameterClass.getSimpleName())) {
-                throw new FatalBeanException(desc("@OrzWebApi request method parameter class name is invalid", "beanClass", beanClass, "parameterClass", parameterClass.getSimpleName(), "expectClassName", expectNamePrefix + "Req"));
+            if (!(expectClassName + "Req").equals(parameterClass.getSimpleName())) {
+                throw new FatalBeanException(desc("@OrzWebApi request method parameter class name is invalid", "beanClass", beanClass, "parameterClass", parameterClass.getSimpleName(), "expectClassName", expectClassName + "Req"));
             }
             var returnClass = method.getReturnType();
             if (returnClass.isAnnotation() || returnClass.isArray() || returnClass.isEnum() || returnClass.isInterface() || returnClass.isPrimitive()) {
                 throw new FatalBeanException(desc("@OrzWebApi request method return class is invalid", "beanClass", beanClass, "returnClass", returnClass));
             }
-            if (!(expectNamePrefix + "Rsp").equals(returnClass.getSimpleName())) {
-                throw new FatalBeanException(desc("@OrzWebApi request method return class name is invalid", "beanClass", beanClass, "returnClass", parameterClass.getSimpleName(), "expectClassName", expectNamePrefix + "Rsp"));
+            if (!(expectClassName + "Rsp").equals(returnClass.getSimpleName())) {
+                throw new FatalBeanException(desc("@OrzWebApi request method return class name is invalid", "beanClass", beanClass, "returnClass", parameterClass.getSimpleName(), "expectClassName", expectClassName + "Rsp"));
             }
         }
     }
