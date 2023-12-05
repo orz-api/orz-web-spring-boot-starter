@@ -71,12 +71,7 @@ public class OrzWebMvcRegistrations implements WebMvcRegistrations {
                 builder.append(annotation.resource());
             }
             builder.append(annotation.action());
-            if (StringUtils.isNotBlank(annotation.by())) {
-                builder.append("By").append(annotation.by());
-            }
-            if (annotation.variant() != 0) {
-                builder.append("V").append(annotation.variant());
-            }
+            builder.append("V").append(annotation.variant());
             return builder.toString();
         }
 
@@ -93,8 +88,7 @@ public class OrzWebMvcRegistrations implements WebMvcRegistrations {
             var expectClassName = annotation.domain()
                     + StringUtils.defaultIfBlank(annotation.resource(), "")
                     + annotation.action()
-                    + (StringUtils.isNotBlank(annotation.by()) ? "By" + annotation.by() : "")
-                    + (annotation.variant() == 0 ? "" : "V" + annotation.variant())
+                    + "V" + annotation.variant()
                     + "Api";
             if (!expectClassName.equals(beanClass.getSimpleName())) {
                 throw new FatalBeanException(desc("@OrzWebApi class name is invalid", "beanClass", beanClass.getSimpleName(), "expectClassName", expectClassName));
