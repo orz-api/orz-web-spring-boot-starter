@@ -1,5 +1,7 @@
 package orz.springboot.web.api;
 
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.core.Ordered;
@@ -10,10 +12,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import orz.springboot.alarm.exception.OrzAlarmException;
 import orz.springboot.alarm.exception.OrzUnexpectedException;
-import orz.springboot.web.exception.OrzWebApiException;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import orz.springboot.web.OrzWebApiException;
 
 import static orz.springboot.base.OrzBaseUtils.hashMap;
 import static orz.springboot.base.description.OrzDescriptionUtils.descValues;

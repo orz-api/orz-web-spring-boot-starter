@@ -3,14 +3,16 @@ package orz.springboot.web.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Data
 @AllArgsConstructor
 public class OrzWebRequestHeadersBo {
     private final String requestId;
 
-    private final Long requestTime;
+    private final LocalDateTime requestTime;
 
-    private final Long userId;
+    private final String userId;
 
     private final String clientIp;
 
@@ -20,9 +22,9 @@ public class OrzWebRequestHeadersBo {
 
     private final String clientChannel;
 
-    private final Long launchTime;
+    private final LocalDateTime launchTime;
 
-    private final Integer launchScene;
+    private final String launchScene;
 
     private final String deviceId;
 

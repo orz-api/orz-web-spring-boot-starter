@@ -1,5 +1,7 @@
 package orz.springboot.web;
 
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Component;
@@ -9,8 +11,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import orz.springboot.alarm.exception.OrzAlarmException;
 import orz.springboot.base.OrzBaseUtils;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.List;
 
 import static orz.springboot.alarm.OrzAlarmUtils.alarm;

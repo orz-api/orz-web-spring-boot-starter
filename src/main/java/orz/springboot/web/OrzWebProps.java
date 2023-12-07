@@ -27,18 +27,18 @@ public class OrzWebProps {
 
     @Valid
     @NotNull
-    private RequestHeaders requestHeaders = new RequestHeaders();
+    private RequestHeadersConfig requestHeaders = new RequestHeadersConfig();
 
     @Valid
     @NotNull
-    private ResponseHeaders responseHeaders = new ResponseHeaders();
+    private ResponseHeadersConfig responseHeaders = new ResponseHeadersConfig();
 
     @Valid
     @NotNull
-    private Page page = new Page();
+    private PageConfig page = new PageConfig();
 
     @Data
-    public static class RequestHeaders {
+    public static class RequestHeadersConfig {
         @NotBlank
         private String requestId = "Orz-Request-Id";
 
@@ -121,7 +121,7 @@ public class OrzWebProps {
     }
 
     @Data
-    public static class ResponseHeaders {
+    public static class ResponseHeadersConfig {
         @NotBlank
         private String version = "Orz-Version";
 
@@ -133,7 +133,7 @@ public class OrzWebProps {
     }
 
     @Data
-    public static class Page {
+    public static class PageConfig {
         @NotNull
         @Positive
         private Integer defaultSize = 50;

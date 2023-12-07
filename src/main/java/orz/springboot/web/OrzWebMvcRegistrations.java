@@ -1,5 +1,6 @@
 package orz.springboot.web;
 
+import jakarta.annotation.Nonnull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.FatalBeanException;
@@ -12,13 +13,11 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import orz.springboot.web.annotation.OrzWebApi;
 
-import javax.annotation.Nonnull;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 
 import static orz.springboot.base.description.OrzDescriptionUtils.desc;
-import static orz.springboot.web.OrzWebConstants.API_PACKAGE;
 
 @Slf4j
 @Component
@@ -33,9 +32,6 @@ public class OrzWebMvcRegistrations implements WebMvcRegistrations {
         protected RequestMappingInfo getMappingForMethod(@Nonnull Method method, @Nonnull Class<?> handlerType) {
             var apiAnnotation = handlerType.getAnnotation(OrzWebApi.class);
             if (apiAnnotation != null) {
-                var packageArray = handlerType.getPackageName().split("\\.");
-                checkWebApiBean(handlerType, packageArray, method, apiAnnotation);
-
                 if (!"request".equals(method.getName())) {
                     if (log.isDebugEnabled()) {
                         log.debug(desc("getMappingForMethod skipped", "beanClass", handlerType, "method", method));
@@ -43,13 +39,11 @@ public class OrzWebMvcRegistrations implements WebMvcRegistrations {
                     return null;
                 }
 
-                var scope = packageArray[packageArray.length - 1];
-                if (API_PACKAGE.equals(scope)) {
-                    scope = null;
-                }
+                var scope = OrzWebUtils.getScope(handlerType);
+                checkWebApiBean(handlerType, scope, method, apiAnnotation);
 
                 var idempotent = apiAnnotation.idempotent();
-                var methodArray = idempotent ? new RequestMethod[]{RequestMethod.PUT} : new RequestMethod[]{RequestMethod.POST};
+                var methodArray = new RequestMethod[]{idempotent ? RequestMethod.PUT : RequestMethod.POST};
 
                 return RequestMappingInfo
                         .paths(buildPath(scope, apiAnnotation))
@@ -62,10 +56,7 @@ public class OrzWebMvcRegistrations implements WebMvcRegistrations {
 
         private static String buildPath(String scope, OrzWebApi annotation) {
             var builder = new StringBuilder();
-            builder.append("/");
-            if (StringUtils.isNotBlank(scope)) {
-                builder.append(StringUtils.capitalize(scope)).append("/");
-            }
+            builder.append("/").append(scope).append("/");
             builder.append(annotation.domain());
             if (StringUtils.isNotBlank(annotation.resource())) {
                 builder.append(annotation.resource());
@@ -75,9 +66,12 @@ public class OrzWebMvcRegistrations implements WebMvcRegistrations {
             return builder.toString();
         }
 
-        private static void checkWebApiBean(Class<?> beanClass, String[] packageArray, Method method, OrzWebApi annotation) {
+        private static void checkWebApiBean(Class<?> beanClass, String scope, Method method, OrzWebApi annotation) {
             if (Arrays.stream(beanClass.getDeclaredMethods()).noneMatch(m -> "request".equals(m.getName()))) {
                 throw new FatalBeanException(desc("@OrzWebApi missing request method", "beanClass", beanClass));
+            }
+            if (StringUtils.isBlank(scope)) {
+                throw new FatalBeanException(desc("@OrzWebApi scope is blank", "beanClass", beanClass));
             }
             if (StringUtils.isBlank(annotation.domain())) {
                 throw new FatalBeanException(desc("@OrzWebApi domain is blank", "beanClass", beanClass));
@@ -92,9 +86,6 @@ public class OrzWebMvcRegistrations implements WebMvcRegistrations {
                     + "Api";
             if (!expectClassName.equals(beanClass.getSimpleName())) {
                 throw new FatalBeanException(desc("@OrzWebApi class name is invalid", "beanClass", beanClass.getSimpleName(), "expectClassName", expectClassName));
-            }
-            if (packageArray.length < 2) {
-                throw new FatalBeanException(desc("@OrzWebApi package name is invalid", "beanClass", beanClass));
             }
             if (method.getModifiers() != Modifier.PUBLIC) {
                 throw new FatalBeanException(desc("@OrzWebApi request method is not public", "beanClass", beanClass));

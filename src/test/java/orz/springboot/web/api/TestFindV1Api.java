@@ -7,7 +7,7 @@ import orz.springboot.alarm.exception.OrzAlarmException;
 import orz.springboot.alarm.exception.OrzUnexpectedException;
 import orz.springboot.web.annotation.OrzWebApi;
 import orz.springboot.web.annotation.OrzWebError;
-import orz.springboot.web.exception.OrzWebApiException;
+import orz.springboot.web.OrzWebApiException;
 
 import static orz.springboot.base.OrzBaseUtils.hashMap;
 import static orz.springboot.base.description.OrzDescriptionUtils.descValues;

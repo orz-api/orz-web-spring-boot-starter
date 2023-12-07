@@ -19,7 +19,6 @@ import orz.springboot.base.OrzBaseUtils;
 import orz.springboot.web.annotation.OrzWebApi;
 import orz.springboot.web.annotation.OrzWebError;
 import orz.springboot.web.annotation.OrzWebErrors;
-import orz.springboot.web.exception.OrzWebApiException;
 import orz.springboot.web.model.OrzWebProtocolBo;
 
 import java.util.Objects;

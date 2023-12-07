@@ -1,10 +1,9 @@
-package orz.springboot.web.exception;
+package orz.springboot.web;
 
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import lombok.Getter;
 import orz.springboot.base.description.OrzDescription;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import static orz.springboot.base.description.OrzDescriptionUtils.desc;
 import static orz.springboot.base.description.OrzDescriptionUtils.descValues;
