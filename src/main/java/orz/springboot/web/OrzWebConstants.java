@@ -6,5 +6,5 @@ public class OrzWebConstants {
 
     public static final String CODE_UNDEFINED = "undefined";
 
-    public static final String API_PACKAGE = "project.api";
+    public static final String API_PACKAGE = "api";
 }
