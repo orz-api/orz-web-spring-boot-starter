@@ -2,6 +2,7 @@ package orz.springboot.web;
 
 import org.apache.commons.lang3.StringUtils;
 import orz.springboot.base.OrzBaseUtils;
+import orz.springboot.web.annotation.OrzWebScope;
 import orz.springboot.web.model.OrzWebRequestHeadersBo;
 
 import java.util.Arrays;
@@ -28,9 +29,16 @@ public class OrzWebUtils {
     }
 
     public static String getScope(Class<?> cls) {
+        var annotation = cls.getPackage().getAnnotation(OrzWebScope.class);
+        if (annotation != null && StringUtils.isNotBlank(annotation.name())) {
+            return annotation.name();
+        }
+
         var packageName = cls.getPackageName();
-        if (packageName.length() <= API_PACKAGE.length() || !packageName.startsWith(API_PACKAGE)) {
-            return null;
+        if (annotation == null) {
+            if (packageName.length() <= API_PACKAGE.length() || !packageName.startsWith(API_PACKAGE)) {
+                return null;
+            }
         }
         var scope = packageName.substring(packageName.lastIndexOf('.') + 1);
         return Arrays.stream(scope.split("_")).map(StringUtils::capitalize).collect(Collectors.joining());

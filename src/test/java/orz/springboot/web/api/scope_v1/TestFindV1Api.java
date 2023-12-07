@@ -1,4 +1,4 @@
-package orz.springboot.web.api;
+package orz.springboot.web.api.scope_v1;
 
 import lombok.Data;
 import org.springframework.validation.annotation.Validated;
@@ -12,11 +12,11 @@ import orz.springboot.web.OrzWebApiException;
 import static orz.springboot.base.OrzBaseUtils.hashMap;
 import static orz.springboot.base.description.OrzDescriptionUtils.descValues;
 
-@OrzWebApi(domain = "test", action = "find", variant = 1)
+@OrzWebApi(domain = "Test", action = "Find", variant = 1)
 public class TestFindV1Api {
     @OrzWebError(code = "1", reason = "test 1")
     @OrzWebError(code = "2", reason = "test 2", alarm = true, logging = true)
-    public TestFindV1Rsp request(@Validated @RequestBody TestFindV1Req req) {
+    public TestFindV1ApiRsp request(@Validated @RequestBody TestFindV1ApiReq req) {
         if ("0".equals(req.getTest())) {
             throw new OrzAlarmException("test", hashMap("req", req));
         } else if ("1".equals(req.getTest())) {
@@ -30,15 +30,15 @@ public class TestFindV1Api {
         } else if ("5".equals(req.getTest())) {
             throw new OrzWebApiException("2", descValues("req", req));
         }
-        return new TestFindV1Rsp();
+        return new TestFindV1ApiRsp();
     }
 
     @Data
-    public static class TestFindV1Req {
+    public static class TestFindV1ApiReq {
         private String test;
     }
 
     @Data
-    public static class TestFindV1Rsp {
+    public static class TestFindV1ApiRsp {
     }
 }

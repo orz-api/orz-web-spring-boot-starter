@@ -1,4 +1,4 @@
-package orz.springboot.web.api;
+package orz.springboot.web.api.scope_v1;
 
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
