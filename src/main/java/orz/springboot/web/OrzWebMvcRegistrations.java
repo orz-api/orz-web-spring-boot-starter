@@ -56,8 +56,7 @@ public class OrzWebMvcRegistrations implements WebMvcRegistrations {
 
         private static String buildPath(String scope, OrzWebApi annotation) {
             var builder = new StringBuilder();
-            builder.append("/").append(scope).append("/");
-            builder.append(annotation.domain());
+            builder.append("/").append(scope).append("/").append(annotation.domain()).append("/");
             if (StringUtils.isNotBlank(annotation.resource())) {
                 builder.append(annotation.resource());
             }
