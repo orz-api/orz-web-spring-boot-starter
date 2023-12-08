@@ -3,10 +3,11 @@ package orz.springboot.web;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.server.ResponseStatusException;
+import orz.springboot.alarm.exception.OrzUnexpectedException;
+import orz.springboot.base.OrzBaseUtils;
 import orz.springboot.web.model.OrzWebRequestHeadersBo;
 
 import java.time.LocalDateTime;
@@ -21,7 +22,7 @@ import static orz.springboot.base.description.OrzDescriptionUtils.desc;
 
 @Component
 public class OrzWebRequestHeadersExtractor {
-    private static final String REQUEST_HEADERS_ATTRIBUTE_NAME = OrzWebRequestHeadersBo.class.getName();
+    private static final String REQUEST_HEADERS_ATTRIBUTE_NAME = "ORZ_WEB_REQUEST_HEADERS";
     private static final DateTimeFormatter DATE_TIME_FORMATTER = new DateTimeFormatterBuilder()
             .appendValue(ChronoField.YEAR, 4)
             .appendValue(ChronoField.MONTH_OF_YEAR, 2)
@@ -41,15 +42,12 @@ public class OrzWebRequestHeadersExtractor {
     }
 
     public OrzWebRequestHeadersBo extract() {
-        var request = getCurrentRequest();
-        if (request == null) {
-            throw new ResponseStatusException(500, "current request is null", null);
-        }
-        return extract(request);
+        return extract(getCurrentRequest());
     }
 
     public OrzWebRequestHeadersBo extract(HttpServletRequest request) {
-        return extractFromRequestContext().orElseGet(() -> extractFromRequest(request));
+        return OrzBaseUtils.getRequestAttribute(REQUEST_HEADERS_ATTRIBUTE_NAME, OrzWebRequestHeadersBo.class)
+                .orElseGet(() -> extractFromRequest(request));
     }
 
     private OrzWebRequestHeadersBo extractFromRequest(HttpServletRequest request) {
@@ -72,20 +70,7 @@ public class OrzWebRequestHeadersExtractor {
                 getStringHeader(request, field.getPlatformVersion(), field.isPlatformVersionRequired()),
                 getStringHeader(request, field.getPlatformSDKVersion(), field.isPlatformSDKVersionRequired())
         );
-        return saveToRequestContext(headers);
-    }
-
-    private Optional<OrzWebRequestHeadersBo> extractFromRequestContext() {
-        return Optional.ofNullable(RequestContextHolder.getRequestAttributes())
-                .map(attrs -> attrs.getAttribute(REQUEST_HEADERS_ATTRIBUTE_NAME, RequestAttributes.SCOPE_REQUEST))
-                .map(OrzWebRequestHeadersBo.class::cast);
-    }
-
-    private OrzWebRequestHeadersBo saveToRequestContext(OrzWebRequestHeadersBo headers) {
-        var requestAttributes = RequestContextHolder.getRequestAttributes();
-        if (requestAttributes != null) {
-            requestAttributes.setAttribute(REQUEST_HEADERS_ATTRIBUTE_NAME, headers, RequestAttributes.SCOPE_REQUEST);
-        }
+        OrzBaseUtils.setRequestAttribute(REQUEST_HEADERS_ATTRIBUTE_NAME, headers);
         return headers;
     }
 
@@ -94,7 +79,7 @@ public class OrzWebRequestHeadersExtractor {
                 .filter(ServletRequestAttributes.class::isInstance)
                 .map(ServletRequestAttributes.class::cast)
                 .map(ServletRequestAttributes::getRequest)
-                .orElse(null);
+                .orElseThrow(() -> new OrzUnexpectedException("getCurrentRequest() is null"));
     }
 
     private static String getStringHeader(HttpServletRequest request, String headerName, boolean required) {
