@@ -22,10 +22,10 @@ import java.util.List;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 @Component
-public class OrzWebApiHandler {
+public class OrzWebHandler {
     private final OrzWebProps props;
 
-    public OrzWebApiHandler(OrzWebProps props) {
+    public OrzWebHandler(OrzWebProps props) {
         this.props = props;
     }
 

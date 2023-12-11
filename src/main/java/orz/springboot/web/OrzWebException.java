@@ -9,19 +9,19 @@ import static orz.springboot.base.description.OrzDescriptionUtils.desc;
 import static orz.springboot.base.description.OrzDescriptionUtils.descValues;
 
 @Getter
-public class OrzWebApiException extends RuntimeException {
+public class OrzWebException extends RuntimeException {
     private final String code;
     private final OrzDescription description;
 
-    public OrzWebApiException(@Nonnull String code) {
+    public OrzWebException(@Nonnull String code) {
         this(code, null, null);
     }
 
-    public OrzWebApiException(@Nonnull String code, @Nullable OrzDescription description) {
+    public OrzWebException(@Nonnull String code, @Nullable OrzDescription description) {
         this(code, description, null);
     }
 
-    public OrzWebApiException(@Nonnull String code, @Nullable OrzDescription description, @Nullable Throwable cause) {
+    public OrzWebException(@Nonnull String code, @Nullable OrzDescription description, @Nullable Throwable cause) {
         super(buildMessage(code, description), cause);
         this.code = code;
         this.description = description;

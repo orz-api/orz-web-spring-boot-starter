@@ -5,9 +5,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import orz.springboot.alarm.exception.OrzAlarmException;
 import orz.springboot.alarm.exception.OrzUnexpectedException;
+import orz.springboot.web.OrzWebException;
 import orz.springboot.web.annotation.OrzWebApi;
 import orz.springboot.web.annotation.OrzWebError;
-import orz.springboot.web.OrzWebApiException;
 
 import static orz.springboot.base.OrzBaseUtils.hashMap;
 import static orz.springboot.base.description.OrzDescriptionUtils.descValues;
@@ -20,15 +20,15 @@ public class TestFindV1Api {
         if ("0".equals(req.getTest())) {
             throw new OrzAlarmException("test", hashMap("req", req));
         } else if ("1".equals(req.getTest())) {
-            throw new OrzWebApiException("1", descValues("req", req));
+            throw new OrzWebException("1", descValues("req", req));
         } else if ("2".equals(req.getTest())) {
-            throw new OrzWebApiException("1", descValues("req", req), new OrzAlarmException("test", hashMap("req", req)));
+            throw new OrzWebException("1", descValues("req", req), new OrzAlarmException("test", hashMap("req", req)));
         } else if ("3".equals(req.getTest())) {
             throw new OrzUnexpectedException("request error", hashMap("req", req));
         } else if ("4".equals(req.getTest())) {
-            throw new OrzWebApiException("not_exists_code");
+            throw new OrzWebException("not_exists_code");
         } else if ("5".equals(req.getTest())) {
-            throw new OrzWebApiException("2", descValues("req", req));
+            throw new OrzWebException("2", descValues("req", req));
         }
         return new TestFindV1ApiRsp();
     }

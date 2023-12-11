@@ -20,12 +20,12 @@ public class OrzWebUtils {
         return pageSize;
     }
 
-    public static OrzWebRequestHeadersBo extractRequestHeaders() {
+    public static OrzWebRequestHeadersBo getRequestHeaders() {
         return OrzBaseUtils.getAppContext().getBean(OrzWebRequestHeadersExtractor.class).extract();
     }
 
     public static String getClientType() {
-        return extractRequestHeaders().getClientType();
+        return getRequestHeaders().getClientType();
     }
 
     public static String getScope(Class<?> cls) {

@@ -1,6 +1,6 @@
 orz.springboot.web.OrzWebProps
-orz.springboot.web.OrzWebApiHandler
-orz.springboot.web.OrzWebApiAdvice
+orz.springboot.web.OrzWebAdvice
+orz.springboot.web.OrzWebHandler
 orz.springboot.web.OrzWebRequestHeadersExtractor
 orz.springboot.web.OrzWebMvcConfigurer
 orz.springboot.web.OrzWebMvcRegistrations

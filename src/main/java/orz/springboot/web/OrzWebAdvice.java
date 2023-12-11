@@ -28,12 +28,12 @@ import static orz.springboot.base.OrzBaseUtils.hashMap;
 import static orz.springboot.base.description.OrzDescriptionUtils.descTitles;
 
 @RestControllerAdvice(annotations = {OrzWebApi.class})
-public class OrzWebApiAdvice implements ResponseBodyAdvice<Object> {
+public class OrzWebAdvice implements ResponseBodyAdvice<Object> {
     private static final Logger logger = LoggerFactory.getLogger("orz-web-api");
 
-    private final OrzWebApiHandler handler;
+    private final OrzWebHandler handler;
 
-    public OrzWebApiAdvice(OrzWebApiHandler handler) {
+    public OrzWebAdvice(OrzWebHandler handler) {
         this.handler = handler;
     }
 
@@ -47,9 +47,9 @@ public class OrzWebApiAdvice implements ResponseBodyAdvice<Object> {
         return handler.processSuccessResponse(body, response);
     }
 
-    @ExceptionHandler({OrzWebApiException.class})
+    @ExceptionHandler({OrzWebException.class})
     public Object handleWebApiException(Exception topException, HandlerMethod handler, HttpServletRequest request) throws Exception {
-        var exception = OrzBaseUtils.getException(OrzWebApiException.class, topException).orElseThrow(() -> topException);
+        var exception = OrzBaseUtils.getException(OrzWebException.class, topException).orElseThrow(() -> topException);
         var annotation = getErrorAnnotation(handler, exception.getCode());
 
         OrzWebProtocolBo protocol;

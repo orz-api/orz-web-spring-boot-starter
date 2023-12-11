@@ -12,7 +12,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import orz.springboot.alarm.exception.OrzAlarmException;
 import orz.springboot.alarm.exception.OrzUnexpectedException;
-import orz.springboot.web.OrzWebApiException;
+import orz.springboot.web.OrzWebException;
 
 import static orz.springboot.base.OrzBaseUtils.hashMap;
 import static orz.springboot.base.description.OrzDescriptionUtils.descValues;
@@ -33,9 +33,9 @@ public class TestWebMvcConfigurer implements WebMvcConfigurer {
             if ("0".equals(request.getParameter("test"))) {
                 throw new OrzAlarmException("TestInterceptor", hashMap("handler", handler));
             } else if ("1".equals(request.getParameter("test"))) {
-                throw new OrzWebApiException("1", descValues("handler", handler));
+                throw new OrzWebException("1", descValues("handler", handler));
             } else if ("2".equals(request.getParameter("test"))) {
-                throw new OrzWebApiException("1", descValues("handler", handler), new OrzAlarmException("TestInterceptor", hashMap("handler", handler)));
+                throw new OrzWebException("1", descValues("handler", handler), new OrzAlarmException("TestInterceptor", hashMap("handler", handler)));
             } else if ("3".equals(request.getParameter("test"))) {
                 throw new OrzUnexpectedException("TestInterceptor error", hashMap("handler", handler));
             } else if ("4".equals(request.getParameter("test"))) {
