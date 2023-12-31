@@ -17,7 +17,7 @@ public @interface OrzWebApi {
 
     int variant();
 
-    boolean idempotent() default false;
+    boolean query() default false;
 
     String description() default "";
 }

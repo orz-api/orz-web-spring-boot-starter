@@ -42,8 +42,8 @@ public class OrzWebMvcRegistrations implements WebMvcRegistrations {
                 var scope = OrzWebUtils.getScope(handlerType);
                 checkWebApiBean(handlerType, scope, method, apiAnnotation);
 
-                var idempotent = apiAnnotation.idempotent();
-                var methodArray = new RequestMethod[]{idempotent ? RequestMethod.PUT : RequestMethod.POST};
+                var query = apiAnnotation.query();
+                var methodArray = new RequestMethod[]{query ? RequestMethod.PUT : RequestMethod.POST};
 
                 return RequestMappingInfo
                         .paths(buildPath(scope, apiAnnotation))
