@@ -15,7 +15,7 @@ public class OrzWebProtocolBo {
         return StringUtils.isBlank(code);
     }
 
-    public boolean codeEquals(String code) {
+    public boolean is(String code) {
         return StringUtils.equals(this.code, code);
     }
 
