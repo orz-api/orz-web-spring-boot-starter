@@ -75,6 +75,11 @@ public class OrzWebProps {
         private boolean clientChannelRequired = false;
 
         @NotBlank
+        private String initialTime = "Orz-Initial-Time";
+
+        private boolean initialTimeRequired = true;
+
+        @NotBlank
         private String launchTime = "Orz-Launch-Time";
 
         private boolean launchTimeRequired = true;

@@ -22,6 +22,8 @@ public class OrzWebRequestHeadersBo {
 
     private final String clientChannel;
 
+    private final LocalDateTime InitialTime;
+
     private final LocalDateTime launchTime;
 
     private final String launchScene;

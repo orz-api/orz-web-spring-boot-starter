@@ -60,6 +60,7 @@ public class OrzWebRequestHeadersExtractor {
                 getStringHeader(request, field.getClientType(), field.isClientTypeRequired()),
                 getIntHeader(request, field.getClientVersion(), field.isClientVersionRequired()),
                 getStringHeader(request, field.getClientChannel(), field.isClientChannelRequired()),
+                getDateTimeHeader(request, field.getInitialTime(), field.isInitialTimeRequired()),
                 getDateTimeHeader(request, field.getLaunchTime(), field.isLaunchTimeRequired()),
                 getStringHeader(request, field.getLaunchScene(), field.isLaunchSceneRequired()),
                 getStringHeader(request, field.getDeviceId(), field.isDeviceIdRequired()),
