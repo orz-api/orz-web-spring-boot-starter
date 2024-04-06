@@ -97,32 +97,32 @@ public class OrzWebProps {
         @NotBlank
         private String deviceBrand = "Orz-Device-Brand";
 
-        private boolean deviceBrandRequired = true;
+        private boolean deviceBrandRequired = false;
 
         @NotBlank
         private String deviceModel = "Orz-Device-Model";
 
-        private boolean deviceModelRequired = true;
+        private boolean deviceModelRequired = false;
 
         @NotBlank
         private String osType = "Orz-OS-Type";
 
-        private boolean osTypeRequired = true;
+        private boolean osTypeRequired = false;
 
         @NotBlank
         private String osName = "Orz-OS-Name";
 
-        private boolean osNameRequired = true;
+        private boolean osNameRequired = false;
 
         @NotBlank
         private String platformVersion = "Orz-Platform-Version";
 
-        private boolean platformVersionRequired = true;
+        private boolean platformVersionRequired = false;
 
         @NotBlank
         private String platformSDKVersion = "Orz-Platform-SDK-Version";
 
-        private boolean platformSDKVersionRequired = true;
+        private boolean platformSDKVersionRequired = false;
     }
 
     @Data
