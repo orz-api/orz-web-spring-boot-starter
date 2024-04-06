@@ -2,6 +2,7 @@ package orz.springboot.web;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Data;
@@ -9,10 +10,17 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
 
+import java.time.Duration;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
 @Data
 @Validated
 @ConfigurationProperties(prefix = "orz.web")
 public class OrzWebProps {
+    public static final Map<String, CorsConfig> CORS_DEFAULT = Map.of("/**", new CorsConfig());
+
     @Value("${orz.web.service:${spring.application.name:unnamed}}")
     @NotNull
     private String service = "unnamed";
@@ -27,6 +35,10 @@ public class OrzWebProps {
 
     @Valid
     @NotNull
+    private Map<String, CorsConfig> cors = Collections.emptyMap();
+
+    @Valid
+    @NotNull
     private RequestHeadersConfig requestHeaders = new RequestHeadersConfig();
 
     @Valid
@@ -36,6 +48,10 @@ public class OrzWebProps {
     @Valid
     @NotNull
     private PageConfig page = new PageConfig();
+
+    public Map<String, CorsConfig> getCorsOrDefault() {
+        return cors.isEmpty() ? CORS_DEFAULT : cors;
+    }
 
     @Data
     public static class RequestHeadersConfig {
@@ -146,5 +162,20 @@ public class OrzWebProps {
         @NotNull
         @Positive
         private Integer maxSize = 100;
+    }
+
+    @Data
+    public static class CorsConfig {
+        @NotEmpty
+        private List<String> allowedOrigins = List.of("*");
+
+        @NotEmpty
+        private List<String> allowedMethods = List.of("*");
+
+        @NotEmpty
+        private List<String> allowedHeaders = List.of("*");
+
+        @NotNull
+        private Duration maxAge = Duration.ofMinutes(30);
     }
 }
