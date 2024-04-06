@@ -175,6 +175,9 @@ public class OrzWebProps {
         @NotEmpty
         private List<String> allowedHeaders = List.of("*");
 
+        @NotEmpty
+        private List<String> exposedHeaders = List.of("*");
+
         @NotNull
         private Duration maxAge = Duration.ofMinutes(30);
     }

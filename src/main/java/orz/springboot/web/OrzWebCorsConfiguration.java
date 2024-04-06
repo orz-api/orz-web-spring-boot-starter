@@ -20,8 +20,9 @@ public class OrzWebCorsConfiguration {
         props.getCorsOrDefault().forEach((path, config) -> {
             var cors = new CorsConfiguration();
             cors.setAllowedOrigins(config.getAllowedOrigins());
-            cors.setAllowedHeaders(config.getAllowedHeaders());
             cors.setAllowedMethods(config.getAllowedMethods());
+            cors.setAllowedHeaders(config.getAllowedHeaders());
+            cors.setExposedHeaders(config.getExposedHeaders());
             cors.setMaxAge(config.getMaxAge());
             source.registerCorsConfiguration(path, cors);
         });
