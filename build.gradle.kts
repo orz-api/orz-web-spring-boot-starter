@@ -2,8 +2,8 @@ plugins {
     signing
     `java-library`
     `maven-publish`
-    id("org.springframework.boot") version "3.1.4"
-    id("io.spring.dependency-management") version "1.1.3"
+    id("org.springframework.boot") version "3.3.2"
+    id("io.spring.dependency-management") version "1.1.6"
 }
 
 group = "io.github.orz-api"
@@ -35,11 +35,14 @@ repositories {
 }
 
 dependencies {
-    api("io.github.orz-api:orz-base-spring-boot-starter:0.0.1-SNAPSHOT")
+    api("io.github.orz-api:orz-base-spring-boot-starter:0.0.2-SNAPSHOT")
     api("org.springframework.boot:spring-boot-starter-web")
 
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+
+    // fix test error [java.net.HttpRetryException: cannot retry due to server authentication, in streaming mode]
+    testImplementation("org.apache.httpcomponents.client5:httpclient5:5.3.1")
 
     compileOnly("org.projectlombok:lombok")
     testCompileOnly("org.projectlombok:lombok")
