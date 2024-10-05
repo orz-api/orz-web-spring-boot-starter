@@ -14,6 +14,8 @@ public class OrzWebRequestHeadersBo {
 
     private final String userId;
 
+    private final String userRole;
+
     private final String clientIp;
 
     private final String clientType;
