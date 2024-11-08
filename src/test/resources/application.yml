@@ -1,1 +1,3 @@
-
+spring:
+  application:
+    name: orz-web-spring-boot-starter-test
