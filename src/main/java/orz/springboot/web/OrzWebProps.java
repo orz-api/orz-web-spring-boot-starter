@@ -71,9 +71,9 @@ public class OrzWebProps {
         private boolean userIdRequired = false;
 
         @NotBlank
-        private String userRole = "Orz-User-Role";
+        private String userType = "Orz-User-Type";
 
-        private boolean userRoleRequired = false;
+        private boolean userTypeRequired = false;
 
         @NotBlank
         private String clientIp = "Orz-Client-Ip";
